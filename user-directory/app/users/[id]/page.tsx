@@ -21,60 +21,94 @@ export default async function UserPage({
   }
 
   return (
-    <main className="container mx-auto max-w-3xl px-4 py-8">
-      <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-bold">User Details</h1>
-        <Link href="/">
-          <Button variant="outline">Back to list</Button>
-        </Link>
-      </div>
-
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-xl">{user.name}</CardTitle>
-          <div className="text-sm text-muted-foreground">@{user.username}</div>
-        </CardHeader>
-        <CardContent className="space-y-4">
+    <main className="min-h-screen bg-gradient-to-b from-background to-muted/20">
+      <div className="container mx-auto max-w-3xl px-4 py-10">
+        <div className="mb-6 flex items-center justify-between">
           <div>
-            <div className="text-sm font-medium">Email</div>
-            <div className="text-sm">{user.email}</div>
+            <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
+              User Details
+            </h1>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Detailed information for {user.name}
+            </p>
           </div>
+          <Link href="/">
+            <Button variant="outline" className="shadow-sm">
+              Back to list
+            </Button>
+          </Link>
+        </div>
 
-          <div>
-            <div className="text-sm font-medium">Phone</div>
-            <div className="text-sm">{user.phone}</div>
-          </div>
-
-          <div>
-            <div className="text-sm font-medium">Address</div>
-            <div className="text-sm">
-              {user.address.street}, {user.address.city} – {user.address.zipcode}
+        <Card className="border bg-card/60 backdrop-blur shadow-md">
+          <CardHeader className="border-b pb-4">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <CardTitle className="text-2xl font-semibold">
+                  {user.name}
+                </CardTitle>
+                <div className="mt-1 text-sm text-muted-foreground">
+                  @{user.username}
+                </div>
+              </div>
+              <div className="flex flex-wrap items-center gap-2">
+                <Badge variant="secondary">ID: {user.id}</Badge>
+                <Badge>Active</Badge>
+              </div>
             </div>
-          </div>
+          </CardHeader>
 
-          <div>
-            <div className="text-sm font-medium">Company</div>
-            <div className="text-sm">{user.company.name}</div>
-          </div>
+          <CardContent className="grid gap-5 pt-5 sm:grid-cols-2">
+            <DetailBlock label="Email" value={user.email} />
+            <DetailBlock label="Phone" value={user.phone} />
 
-          <div>
-            <div className="text-sm font-medium">Website</div>
-            <a
-              href={`https://${user.website}`}
-              target="_blank"
-              rel="noreferrer"
-              className="text-sm text-primary underline"
-            >
-              {user.website}
-            </a>
-          </div>
+            <div className="sm:col-span-2">
+              <div className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                Address
+              </div>
+              <div className="mt-1 text-sm">
+                {user.address.street}, {user.address.city} – {user.address.zipcode}
+              </div>
+            </div>
 
-          <div className="flex flex-wrap gap-2 pt-2">
-            <Badge variant="secondary">ID: {user.id}</Badge>
-            <Badge>Active</Badge>
-          </div>
-        </CardContent>
-      </Card>
+            <DetailBlock label="Company" value={user.company.name} />
+            <DetailBlock
+              label="Website"
+              value={user.website}
+              asLink={`https://${user.website}`}
+            />
+          </CardContent>
+        </Card>
+      </div>
     </main>
+  );
+}
+
+function DetailBlock({
+  label,
+  value,
+  asLink,
+}: {
+  label: string;
+  value: string;
+  asLink?: string;
+}) {
+  return (
+    <div>
+      <div className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+        {label}
+      </div>
+      {asLink ? (
+        <a
+          href={asLink}
+          target="_blank"
+          rel="noreferrer"
+          className="mt-1 inline-block text-sm font-medium text-primary underline-offset-4 hover:underline"
+        >
+          {value}
+        </a>
+      ) : (
+        <div className="mt-1 text-sm">{value}</div>
+      )}
+    </div>
   );
 }
